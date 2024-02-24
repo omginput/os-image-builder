@@ -118,7 +118,7 @@ PRE_PACKAGES="${PRE_PACKAGES:-distro-release-repos}"
 [ -z "$FINAL" ] && FINAL=false
 OS_VERSION=""
 IDENTIFIER=""
-while getopts "d:Fi:K:o:p:P:r:s:S:u:v:w:W" opt; do
+while getopts "d:Fi:K:n:o:p:P:r:s:S:u:v:w:W" opt; do
 	case $opt in
 	d)
 		SDDMSESSION="$OPTARG"
@@ -166,6 +166,8 @@ while getopts "d:Fi:K:o:p:P:r:s:S:u:v:w:W" opt; do
 	K)
 		KEEP_OLD_ROOT=true
 		;;
+	n)
+		IMAGENAME="${OPTARG}"
 	*)
 		printf '%s\n' "Unknown option $opt" >&2
 		usage
@@ -925,7 +927,11 @@ cp -a device/${TARGET}/write2device results/ 2>/dev/null || :
 for i in device/${TARGET}/*.md.in device/${TARGET}/write2sd.in device/${TARGET}/write2device.in; do
 	[ -e "$i" ] || continue
 	r="results/$(basename $i .in)"
-	sed -e "s,@OS_VERSION@,${OS_VERSION},g;s,@OMV_VERSION@,${OMV_VERSION},g;s,@BASENAME@,${BASENAME},g" $i >"$r"
+	if [ -z "$IMAGENAME" ]; then
+		sed -e "s,@OS_VERSION@@g;s,@OMV_VERSION@@g;s,@BASENAME@,${IMAGENAME},g" $i >"$r"
+	else
+		sed -e "s,@OS_VERSION@,${OS_VERSION},g;s,@OMV_VERSION@,${OMV_VERSION},g;s,@BASENAME@,${BASENAME},g" $i >"$r"
+	fi
 	[ -x "$i" ] && chmod 0755 "$r"
 done
 
