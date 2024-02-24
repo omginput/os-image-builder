@@ -929,9 +929,9 @@ for i in device/${TARGET}/*.md.in device/${TARGET}/write2sd.in device/${TARGET}/
 	[ -e "$i" ] || continue
 	r="results/$(basename $i .in)"
 	if [ -z "$IMAGENAME" ]; then
-		sed -e "s,@OS_VERSION@@g;s,@OMV_VERSION@@g;s,@BASENAME@,${IMAGENAME},g" $i >"$r"
-	else
 		sed -e "s,@OS_VERSION@,${OS_VERSION},g;s,@OMV_VERSION@,${OMV_VERSION},g;s,@BASENAME@,${BASENAME},g" $i >"$r"
+	else
+		sed -e "s,@OS_VERSION@@g;s,@OMV_VERSION@@g;s,@BASENAME@,${IMAGENAME},g" $i >"$r"
 	fi
 	[ -x "$i" ] && chmod 0755 "$r"
 done
