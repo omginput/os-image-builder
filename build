@@ -168,6 +168,7 @@ while getopts "d:Fi:K:n:o:p:P:r:s:S:u:v:w:W" opt; do
 		;;
 	n)
 		IMAGENAME="${OPTARG}"
+		;;
 	*)
 		printf '%s\n' "Unknown option $opt" >&2
 		usage
